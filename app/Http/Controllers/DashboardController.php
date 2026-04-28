@@ -2,25 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Order;
+use App\Models\Product;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $summary = [
-            'total_devices' => 8,
-            'active_devices' => 6,
-            'total_plants' => 124,
-            'avg_temperature' => 28.4,
-            'avg_humidity' => 76.2,
+        $totalRevenue = Order::query()
+            ->where('status', 'completed')
+            ->sum('total_amount');
+
+        $stats = [
+            'total_products' => Product::count(),
+            'available_products' => Product::where('is_active', true)->count(),
+            'total_orders' => Order::count(),
+            'today_orders' => Order::whereDate('order_date', today())->count(),
+            'total_revenue' => $totalRevenue,
         ];
 
-        $alerts = [
-            'Suhu blok A berada di atas ambang normal.',
-            'Satu perangkat sedang dalam status maintenance.',
-        ];
+        $recentOrders = Order::query()
+            ->latest('order_date')
+            ->with('user')
+            ->take(5)
+            ->get();
 
-        return view('dashboard.index', compact('summary', 'alerts'));
+        return view('dashboard.index', compact('stats', 'recentOrders'));
     }
 }
