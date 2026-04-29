@@ -4,15 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class OrderItem extends Model
+class DetailPesanan extends Model
 {
     use HasFactory;
 
+    protected $table = 'detail_pesanan';
+
     protected $fillable = [
-        'order_id',
-        'product_id',
+        'pesanan_id',
+        'produk_id',
         'product_name',
+        'serving_type',
+        'item_option',
+        'item_note',
         'price',
         'quantity',
         'subtotal',
@@ -26,13 +32,13 @@ class OrderItem extends Model
         ];
     }
 
-    public function order()
+    public function pesanan(): BelongsTo
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Pesanan::class, 'pesanan_id');
     }
 
-    public function product()
+    public function produk(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Produk::class, 'produk_id');
     }
 }

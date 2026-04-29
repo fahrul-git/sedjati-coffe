@@ -2,52 +2,61 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
+use App\Models\Produk;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
-class ProductController extends Controller
+class ProdukController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        $products = Product::query()
+        $products = Produk::query()
             ->latest()
             ->paginate(10);
 
-        return view('products.index', compact('products'));
+        $productStats = [
+            'total' => Produk::count(),
+            'active' => Produk::where('is_active', true)->count(),
+            'low_stock' => Produk::where('stock', '<=', 10)->count(),
+            'sold_out' => Produk::where('stock', '<=', 0)->count(),
+        ];
+
+        return view('products.index', compact('products', 'productStats'));
     }
 
-    public function create()
+    public function create(): View
     {
         return view('products.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $validated = $this->validateProduct($request);
+        $validated = $this->validateProduk($request);
         $validated['slug'] = Str::slug($validated['name']).'-'.Str::lower(Str::random(5));
 
-        Product::create($validated);
+        Produk::create($validated);
 
         return redirect()
             ->route('products.index')
             ->with('success', 'Produk berhasil ditambahkan.');
     }
 
-    public function show(Product $product)
+    public function show(Produk $product): View
     {
         return view('products.show', compact('product'));
     }
 
-    public function edit(Product $product)
+    public function edit(Produk $product): View
     {
         return view('products.edit', compact('product'));
     }
 
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Produk $product): RedirectResponse
     {
-        $validated = $this->validateProduct($request);
+        $validated = $this->validateProduk($request);
         $validated['slug'] = Str::slug($validated['name']).'-'.$product->id;
 
         $product->update($validated);
@@ -57,7 +66,7 @@ class ProductController extends Controller
             ->with('success', 'Produk berhasil diperbarui.');
     }
 
-    public function destroy(Product $product)
+    public function destroy(Produk $product): RedirectResponse
     {
         $product->delete();
 
@@ -66,7 +75,7 @@ class ProductController extends Controller
             ->with('success', 'Produk berhasil dihapus.');
     }
 
-    protected function validateProduct(Request $request): array
+    protected function validateProduk(Request $request): array
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],

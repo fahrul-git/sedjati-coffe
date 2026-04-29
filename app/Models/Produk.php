@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Product extends Model
+class Produk extends Model
 {
     use HasFactory;
+
+    protected $table = 'produk';
 
     protected $fillable = [
         'name',
@@ -27,8 +30,8 @@ class Product extends Model
         ];
     }
 
-    public function orderItems()
+    public function detailPesanan(): HasMany
     {
-        return $this->hasMany(OrderItem::class);
+        return $this->hasMany(DetailPesanan::class, 'produk_id');
     }
 }

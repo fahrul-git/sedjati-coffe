@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
+use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +13,7 @@ class ReportController extends Controller
         $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
         $endDate = $request->input('end_date', now()->toDateString());
 
-        $orders = Order::query()
+        $orders = Pesanan::query()
             ->whereBetween(DB::raw('DATE(order_date)'), [$startDate, $endDate])
             ->with('user')
             ->latest('order_date')
