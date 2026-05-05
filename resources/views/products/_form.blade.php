@@ -23,6 +23,25 @@
     <textarea name="description" id="description" rows="4" class="form-control soft-textarea">{{ old('description', $product->description ?? '') }}</textarea>
 </div>
 
+<div class="mb-4">
+    <label for="image" class="form-label">Gambar Produk</label>
+    <input type="file" name="image" id="image" class="form-control soft-input" accept="image/png,image/jpeg,image/webp">
+    <div class="form-text">Format yang didukung: JPG, PNG, atau WEBP. Maksimal 3 MB.</div>
+
+    @if (! empty($product?->image_url))
+        <div class="mt-3 d-flex align-items-start gap-3">
+            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="rounded-4 border" style="width: 120px; height: 120px; object-fit: cover;">
+            <div>
+                <div class="fw-semibold mb-2">Gambar saat ini</div>
+                <div class="form-check">
+                    <input type="checkbox" name="remove_image" id="remove_image" class="form-check-input" value="1">
+                    <label for="remove_image" class="form-check-label">Hapus gambar lama saat menyimpan</label>
+                </div>
+            </div>
+        </div>
+    @endif
+</div>
+
 <div class="form-check mb-4">
     <input type="checkbox" name="is_active" id="is_active" class="form-check-input" value="1" @checked(old('is_active', $product->is_active ?? true))>
     <label for="is_active" class="form-check-label">Produk aktif</label>

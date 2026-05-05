@@ -1,7 +1,7 @@
 @php
     $topbarTitle = 'Sedjati Coffee';
-    $topbarSubtitle = 'Create order';
-    $topbarSearchPlaceholder = 'Search menu items...';
+    $topbarSubtitle = 'Buat pesanan';
+    $topbarSearchPlaceholder = 'Cari item menu...';
 @endphp
 
 @extends('layouts.app')
@@ -10,9 +10,9 @@
     <div class="page-grid">
         <div class="page-header">
             <div>
-                <div class="page-eyebrow">Point of Sale</div>
-                <h1 class="page-title">New Order</h1>
-                <p class="page-subtitle">Build an order with searchable menu items, custom options, and per-item notes.</p>
+                <div class="page-eyebrow">Kasir</div>
+                <h1 class="page-title">Pesanan Baru</h1>
+                <p class="page-subtitle">Susun pesanan dengan pencarian menu, pilihan item, dan catatan per menu.</p>
             </div>
         </div>
 
@@ -23,7 +23,7 @@
                 <div class="form-card">
                     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
                         <div>
-                            <h2 class="panel-title mb-1">Order Builder</h2>
+                            <h2 class="panel-title mb-1">Penyusun Pesanan</h2>
                             <p class="panel-subtitle">Cari produk, atur jumlah, dan isi instruksi khusus bila perlu.</p>
                         </div>
                         <div class="topbar-search" style="max-width: 340px;">
@@ -63,7 +63,7 @@
                                             <div>
                                                 <div class="fw-semibold">{{ $product->name }}</div>
                                                 <div class="small text-muted">{{ $product->category }} • Rp {{ number_format($product->price, 0, ',', '.') }}</div>
-                                                <div class="small {{ $product->stock > 10 ? 'text-success' : 'text-warning' }}">Stock {{ $product->stock }}</div>
+                                                <div class="small {{ $product->stock > 10 ? 'text-success' : 'text-warning' }}">Stok {{ $product->stock }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -111,19 +111,19 @@
                 </div>
 
                 <aside class="summary-card">
-                    <div class="page-eyebrow">Order Checklist</div>
-                    <h2 class="panel-title mb-3">Before saving</h2>
+                    <div class="page-eyebrow">Checklist Pesanan</div>
+                    <h2 class="panel-title mb-3">Sebelum menyimpan</h2>
                     <div class="stack-list">
                         <div class="stack-item">
-                            <div class="fw-semibold mb-1">Search fast</div>
+                            <div class="fw-semibold mb-1">Cari dengan cepat</div>
                             <div class="small text-muted">Gunakan search untuk memfilter coffee dan side dish secara instan.</div>
                         </div>
                         <div class="stack-item">
-                            <div class="fw-semibold mb-1">Choose correct option</div>
+                            <div class="fw-semibold mb-1">Pilih opsi yang benar</div>
                             <div class="small text-muted">Pastikan varian menu sesuai: panas/es, rasa, atau jenis burger.</div>
                         </div>
                         <div class="stack-item">
-                            <div class="fw-semibold mb-1">Add item notes</div>
+                            <div class="fw-semibold mb-1">Tambahkan catatan item</div>
                             <div class="small text-muted">Isi hanya bila ada permintaan khusus dari pelanggan.</div>
                         </div>
                     </div>

@@ -1,21 +1,22 @@
 @php
     $topbarTitle = 'Sedjati Coffee';
-    $topbarSubtitle = 'Payment receipt';
-    $topbarSearchPlaceholder = 'Search orders...';
+    $topbarSubtitle = 'Struk pembayaran';
+    $topbarSearchPlaceholder = 'Cari pesanan...';
 @endphp
 
 @extends('layouts.app')
 
 @section('content')
     <div class="page-grid receipt-shell">
-        <div class="page-header">
+            <div class="page-header">
             <div>
-                <div class="page-eyebrow">Receipt</div>
-                <h1 class="page-title">Payment Receipt</h1>
-                <p class="page-subtitle">A clean printable summary of the completed transaction.</p>
+                <div class="page-eyebrow">Struk</div>
+                <h1 class="page-title">Struk Pembayaran</h1>
+                <p class="page-subtitle">Ringkasan transaksi selesai yang siap dicetak.</p>
             </div>
             <div class="action-row">
                 <a href="{{ route('orders.show', $order) }}" class="btn-light-soft">Lihat Detail</a>
+                <button type="button" class="btn-light-soft" onclick="window.print()">Cetak</button>
                 <a href="{{ route('orders.create') }}" class="btn-brand">Pesanan Baru</a>
             </div>
         </div>
@@ -24,7 +25,7 @@
             <div class="text-center border-bottom pb-4 mb-4">
                 <div class="brand-mark mx-auto mb-3"><i class="bi bi-cup-hot"></i></div>
                 <h2 class="h3 mb-1">Sedjati Coffee</h2>
-                <p class="text-muted mb-0">Payment receipt for completed order</p>
+                <p class="text-muted mb-0">Struk pembayaran untuk pesanan yang sudah selesai</p>
             </div>
 
             <div class="row mb-4">
@@ -36,7 +37,7 @@
                         </div>
                         <div class="info-row">
                             <span class="muted-copy">Pelanggan</span>
-                            <strong>{{ $order->customer_name ?? 'Walk-in Customer' }}</strong>
+                            <strong>{{ $order->customer_name ?? 'Customer Langsung' }}</strong>
                         </div>
                         <div class="info-row">
                             <span class="muted-copy">Nomor Meja</span>
@@ -112,4 +113,36 @@
             </div>
         </div>
     </div>
+    <style>
+        @media print {
+            body {
+                background: #fff !important;
+            }
+
+            .sidebar,
+            .topbar,
+            .page-header .action-row,
+            .alert {
+                display: none !important;
+            }
+
+            .workspace {
+                grid-template-columns: 1fr !important;
+            }
+
+            .workspace-panel,
+            .page-grid,
+            .receipt-card {
+                box-shadow: none !important;
+                border: 0 !important;
+                background: #fff !important;
+                padding: 0 !important;
+            }
+
+            .receipt-shell {
+                max-width: none !important;
+                margin: 0 !important;
+            }
+        }
+    </style>
 @endsection

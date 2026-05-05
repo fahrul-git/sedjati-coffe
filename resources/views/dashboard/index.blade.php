@@ -1,7 +1,7 @@
 @php
     $topbarTitle = 'Sedjati Coffee';
-    $topbarSubtitle = 'Dashboard overview';
-    $topbarSearchPlaceholder = 'Search orders, menu, customers...';
+    $topbarSubtitle = 'Ringkasan dashboard';
+    $topbarSearchPlaceholder = 'Cari pesanan, menu, customer...';
 @endphp
 
 @extends('layouts.app')
@@ -10,34 +10,34 @@
     <div class="page-grid">
         <div class="page-header">
             <div>
-                <div class="page-eyebrow">Morning Overview</div>
+                <div class="page-eyebrow">Ringkasan Hari Ini</div>
                 <h1 class="page-title">Dashboard</h1>
-                <p class="page-subtitle">Here’s what’s happening at Sedjati Coffee today.</p>
+                <p class="page-subtitle">Berikut ringkasan aktivitas Sedjati Coffee hari ini.</p>
             </div>
         </div>
 
         <div class="metric-grid">
             <div class="metric-card">
-                <div class="metric-label">Total Revenue</div>
-                <div class="metric-value">${{ number_format($stats['total_revenue'] / 1000, 2) }}k</div>
-                <div class="metric-foot text-success">{{ $stats['revenue_change'] }} vs yesterday</div>
+                <div class="metric-label">Total Pendapatan</div>
+                <div class="metric-value">Rp {{ number_format($stats['total_revenue'], 0, ',', '.') }}</div>
+                <div class="metric-foot text-success">{{ $stats['revenue_change'] }} dibanding kemarin</div>
                 <i class="bi bi-cash-stack metric-icon"></i>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Total Orders</div>
+                <div class="metric-label">Total Pesanan</div>
                 <div class="metric-value">{{ $stats['total_orders'] }}</div>
-                <div class="metric-foot text-success">{{ $stats['orders_change'] }} vs yesterday</div>
+                <div class="metric-foot text-success">{{ $stats['orders_change'] }} dibanding kemarin</div>
                 <i class="bi bi-receipt-cutoff metric-icon"></i>
             </div>
             <div class="metric-card featured">
-                <div class="metric-label">Active Tables</div>
+                <div class="metric-label">Meja Aktif</div>
                 <div class="metric-value">{{ $stats['active_tables'] }}</div>
                 <div class="metric-foot">{{ $stats['active_tables_change'] }}</div>
                 <i class="bi bi-table metric-icon"></i>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Avg. Prep Time</div>
-                <div class="metric-value">{{ $stats['avg_prep_time'] }} min</div>
+                <div class="metric-label">Rata-rata Waktu Siap</div>
+                <div class="metric-value">{{ $stats['avg_prep_time'] }} menit</div>
                 <div class="metric-foot text-danger">{{ $stats['prep_time_change'] }}</div>
                 <i class="bi bi-stopwatch metric-icon"></i>
             </div>
@@ -47,10 +47,10 @@
             <div class="panel-card">
                 <div class="panel-heading">
                     <div>
-                        <h2 class="panel-title">Sales Overview</h2>
-                        <p class="panel-subtitle">Weekly transaction volume</p>
+                        <h2 class="panel-title">Ringkasan Penjualan</h2>
+                        <p class="panel-subtitle">Volume transaksi mingguan</p>
                     </div>
-                    <span class="micro-select">Last 7 Days</span>
+                    <span class="micro-select">7 Hari Terakhir</span>
                 </div>
                 <div class="bar-chart">
                     @foreach ($salesOverview as $bar)
@@ -68,8 +68,8 @@
             <div class="panel-card">
                 <div class="panel-heading">
                     <div>
-                        <h2 class="panel-title">Trending Items</h2>
-                        <p class="panel-subtitle">Top movers this week</p>
+                        <h2 class="panel-title">Menu Terlaris</h2>
+                        <p class="panel-subtitle">Performa terbaik minggu ini</p>
                     </div>
                 </div>
                 <div class="trend-list">
@@ -79,17 +79,17 @@
                                 <div class="trend-avatar"><i class="bi {{ $item['icon'] }}"></i></div>
                                 <div>
                                     <div class="fw-semibold">{{ $item['name'] }}</div>
-                                    <div class="small text-muted">{{ $item['orders'] }} orders this week</div>
+                                    <div class="small text-muted">{{ $item['orders'] }} pesanan minggu ini</div>
                                 </div>
                             </div>
-                            <div class="fw-semibold">${{ number_format($item['price'] / 1000, 2) }}</div>
+                            <div class="fw-semibold">Rp {{ number_format($item['price'], 0, ',', '.') }}</div>
                         </div>
                     @empty
                         <div class="text-muted small">Belum ada data item populer.</div>
                     @endforelse
                 </div>
                 <div class="mt-3">
-                    <a href="{{ route('products.index') }}" class="btn btn-light-soft w-100">View Full Menu Performance</a>
+                    <a href="{{ route('products.index') }}" class="btn btn-light-soft w-100">Lihat Performa Menu Lengkap</a>
                 </div>
             </div>
         </div>
@@ -97,19 +97,19 @@
         <div class="section-table">
             <div class="section-table-header">
                 <div>
-                    <h2 class="panel-title">Recent Orders</h2>
-                    <p class="panel-subtitle">Latest transactions from the floor</p>
+                    <h2 class="panel-title">Pesanan Terbaru</h2>
+                    <p class="panel-subtitle">Transaksi terbaru dari area operasional</p>
                 </div>
-                <a href="{{ route('orders.index') }}" class="small fw-semibold text-decoration-none" style="color: var(--brand);">View All <i class="bi bi-arrow-right"></i></a>
+                <a href="{{ route('orders.index') }}" class="small fw-semibold text-decoration-none" style="color: var(--brand);">Lihat Semua <i class="bi bi-arrow-right"></i></a>
             </div>
             <div class="table-responsive">
                 <table class="table table-clean">
                     <thead>
                         <tr>
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Items</th>
-                            <th>Time</th>
+                            <th>No. Pesanan</th>
+                            <th>Pelanggan</th>
+                            <th>Item</th>
+                            <th>Waktu</th>
                             <th>Total</th>
                             <th>Status</th>
                         </tr>
@@ -118,13 +118,13 @@
                         @forelse ($recentOrders as $order)
                             <tr>
                                 <td class="fw-semibold">{{ $order->order_number }}</td>
-                                <td>{{ $order->customer_name ?? 'Walk-in Customer' }}</td>
+                                <td>{{ $order->customer_name ?? 'Customer Langsung' }}</td>
                                 <td>{{ $order->detailPesanan->take(2)->pluck('product_name')->implode(', ') }}</td>
                                 <td>{{ $order->order_date->diffForHumans() }}</td>
-                                <td>${{ number_format($order->total_amount / 1000, 2) }}</td>
+                                <td>Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                                 <td>
                                     <span class="status-pill {{ $order->payment_status === 'paid' ? 'status-success' : 'status-warning' }}">
-                                        {{ strtoupper($order->payment_status ?? 'pending') }}
+                                        {{ ($order->payment_status ?? 'pending') === 'paid' ? 'Lunas' : 'Pending' }}
                                     </span>
                                 </td>
                             </tr>

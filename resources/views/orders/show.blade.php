@@ -1,7 +1,7 @@
 @php
     $topbarTitle = 'Sedjati Coffee';
-    $topbarSubtitle = 'Order detail';
-    $topbarSearchPlaceholder = 'Search orders...';
+    $topbarSubtitle = 'Detail pesanan';
+    $topbarSearchPlaceholder = 'Cari pesanan...';
 @endphp
 
 @extends('layouts.app')
@@ -10,12 +10,12 @@
     <div class="page-grid">
         <div class="page-header">
             <div>
-                <div class="page-eyebrow">Order Profile</div>
+                <div class="page-eyebrow">Profil Pesanan</div>
                 <h1 class="page-title">{{ $order->order_number }}</h1>
-                <p class="page-subtitle">Detailed breakdown of customer order, items, and payment progress.</p>
+                <p class="page-subtitle">Rincian lengkap pesanan pelanggan, item, dan progres pembayaran.</p>
             </div>
             <div class="action-row">
-                <a href="{{ route('orders.index') }}" class="btn-light-soft">Back to Orders</a>
+                <a href="{{ route('orders.index') }}" class="btn-light-soft">Kembali ke Pesanan</a>
                 @if (($order->payment_status ?? 'pending') !== 'paid')
                     <a href="{{ route('orders.payment.create', $order) }}" class="btn-brand">Lanjutkan Pembayaran</a>
                 @else
@@ -28,7 +28,7 @@
             <div class="panel-card">
                 <div class="panel-heading">
                     <div>
-                        <h2 class="panel-title">Order Items</h2>
+                        <h2 class="panel-title">Item Pesanan</h2>
                         <p class="panel-subtitle">{{ $order->detailPesanan->count() }} item dalam transaksi ini</p>
                     </div>
                 </div>
@@ -70,11 +70,11 @@
             </div>
 
             <aside class="panel-card">
-                <div class="page-eyebrow">Information</div>
+                <div class="page-eyebrow">Informasi</div>
                 <div class="info-list mt-3">
                     <div class="info-row">
                         <span class="muted-copy">Pelanggan</span>
-                        <strong>{{ $order->customer_name ?? 'Walk-in Customer' }}</strong>
+                        <strong>{{ $order->customer_name ?? 'Customer Langsung' }}</strong>
                     </div>
                     <div class="info-row">
                         <span class="muted-copy">Nomor Meja</span>
@@ -90,7 +90,7 @@
                     </div>
                     <div class="info-row">
                         <span class="muted-copy">Status Order</span>
-                        <span class="status-pill {{ $order->status === 'completed' ? 'status-success' : 'status-warning' }}">{{ ucfirst($order->status) }}</span>
+                        <span class="status-pill {{ $order->status === 'completed' ? 'status-success' : 'status-warning' }}">{{ $order->status === 'completed' ? 'Selesai' : ucfirst($order->status) }}</span>
                     </div>
                     <div class="info-row">
                         <span class="muted-copy">Metode Bayar</span>
@@ -98,7 +98,7 @@
                     </div>
                     <div class="info-row">
                         <span class="muted-copy">Status Bayar</span>
-                        <span class="status-pill {{ ($order->payment_status ?? 'pending') === 'paid' ? 'status-success' : 'status-warning' }}">{{ ucfirst($order->payment_status ?? 'pending') }}</span>
+                        <span class="status-pill {{ ($order->payment_status ?? 'pending') === 'paid' ? 'status-success' : 'status-warning' }}">{{ ($order->payment_status ?? 'pending') === 'paid' ? 'Lunas' : ucfirst($order->payment_status ?? 'pending') }}</span>
                     </div>
                     @if ($order->payment_method === 'cash' && $order->payment_status === 'paid')
                         <div class="info-row">

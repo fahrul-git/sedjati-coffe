@@ -1,7 +1,7 @@
 @php
     $topbarTitle = 'Sedjati Coffee';
-    $topbarSubtitle = 'Orders management';
-    $topbarSearchPlaceholder = 'Search orders...';
+    $topbarSubtitle = 'Manajemen pesanan';
+    $topbarSearchPlaceholder = 'Cari pesanan...';
 @endphp
 
 @extends('layouts.app')
@@ -10,45 +10,56 @@
     <div class="page-grid">
         <div class="page-header">
             <div>
-                <div class="page-eyebrow">Management</div>
-                <h1 class="page-title">Orders Management</h1>
-                <p class="page-subtitle">Review and manage all incoming and historical customer orders.</p>
+                <div class="page-eyebrow">Manajemen</div>
+                <h1 class="page-title">Manajemen Pesanan</h1>
+                <p class="page-subtitle">Tinjau dan kelola semua pesanan masuk maupun riwayat transaksi.</p>
             </div>
             <div class="action-row">
                 <button class="btn-light-soft" type="button"><i class="bi bi-funnel"></i> Filter</button>
-                <button class="btn-light-soft" type="button"><i class="bi bi-download"></i> Export</button>
+                <button class="btn-light-soft" type="button"><i class="bi bi-download"></i> Ekspor</button>
             </div>
         </div>
 
         <div class="metric-grid">
             <div class="metric-card">
-                <div class="metric-label">Today's Revenue</div>
-                <div class="metric-value">${{ number_format($orderStats['today_revenue'] / 1000, 2) }}k</div>
-                <div class="metric-foot text-success">+12.5%</div>
+                <div class="metric-label">Pendapatan Hari Ini</div>
+                <div class="metric-value">Rp {{ number_format($orderStats['today_revenue'], 0, ',', '.') }}</div>
+                <div class="metric-foot text-success">Performa penjualan hari ini</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Active Orders</div>
+                <div class="metric-label">Pesanan Aktif</div>
                 <div class="metric-value">{{ $orderStats['active_orders'] }}</div>
-                <div class="metric-foot text-warning">8 pending</div>
+                <div class="metric-foot text-warning">Masih perlu diproses</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Avg. Prep Time</div>
+                <div class="metric-label">Rata-rata Waktu Siap</div>
                 <div class="metric-value">{{ $orderStats['avg_prep_time'] }}</div>
-                <div class="metric-foot">-0.5m today</div>
+                <div class="metric-foot">Rata-rata hari ini</div>
             </div>
             <div class="metric-card">
-                <div class="metric-label">Satisfaction</div>
+                <div class="metric-label">Kepuasan</div>
                 <div class="metric-value">{{ $orderStats['satisfaction'] }}</div>
-                <div class="metric-foot text-success">4.9/5.0</div>
+                <div class="metric-foot text-success">Ulasan layanan</div>
             </div>
         </div>
 
         <div class="orders-toolbar">
-            <div class="topbar-search" style="max-width: 360px;">
-                <i class="bi bi-search"></i>
-                <input type="search" id="orders-search" class="form-control" placeholder="Search customer, order, items...">
-            </div>
-            <a href="{{ route('orders.create') }}" class="btn-brand"><i class="bi bi-plus-lg"></i> New Order</a>
+            <form method="GET" class="d-flex flex-wrap gap-2 align-items-center w-100">
+                <div class="topbar-search" style="max-width: 320px;">
+                    <i class="bi bi-search"></i>
+                    <input type="search" name="q" class="form-control" placeholder="Cari pelanggan, pesanan, item..." value="{{ $filters['q'] ?? '' }}">
+                </div>
+                <input type="date" name="date_from" class="form-control micro-select" style="width: 170px;" value="{{ $filters['date_from'] ?? '' }}">
+                <input type="date" name="date_to" class="form-control micro-select" style="width: 170px;" value="{{ $filters['date_to'] ?? '' }}">
+                <select name="payment_status" class="form-select micro-select" style="width: 170px;">
+                    <option value="">Semua Pembayaran</option>
+                    <option value="pending" @selected(($filters['payment_status'] ?? '') === 'pending')>Pending</option>
+                    <option value="paid" @selected(($filters['payment_status'] ?? '') === 'paid')>Lunas</option>
+                </select>
+                <button type="submit" class="btn-light-soft"><i class="bi bi-funnel"></i> Terapkan</button>
+                <a href="{{ route('orders.index') }}" class="btn-light-soft">Reset</a>
+                <a href="{{ route('orders.create') }}" class="btn-brand ms-auto"><i class="bi bi-plus-lg"></i> Pesanan Baru</a>
+            </form>
         </div>
 
         <div class="section-table">
@@ -56,19 +67,19 @@
                 <table class="table table-clean" id="orders-table">
                     <thead>
                         <tr>
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Items</th>
-                            <th>Date</th>
+                            <th>No. Pesanan</th>
+                            <th>Pelanggan</th>
+                            <th>Item</th>
+                            <th>Tanggal</th>
                             <th>Status</th>
                             <th>Total</th>
-                            <th>Actions</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($orders as $order)
                             @php
-                                $customerName = $order->customer_name ?? 'Walk-in Customer';
+                                $customerName = $order->customer_name ?? 'Customer Langsung';
                                 $initials = collect(explode(' ', trim($customerName)))->filter()->take(2)->map(fn ($part) => strtoupper(substr($part, 0, 1)))->implode('');
                                 $summaryItems = $order->detailPesanan->take(2)->map(function ($item) {
                                     return $item->quantity . 'x ' . $item->product_name;
@@ -79,7 +90,7 @@
                                     default => 'status-warning',
                                 };
                             @endphp
-                            <tr class="order-row" data-search="{{ strtolower($order->order_number.' '.$customerName.' '.$summaryItems) }}">
+                            <tr>
                                 <td class="fw-semibold">{{ $order->order_number }}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-3">
@@ -95,15 +106,15 @@
                                     <div class="small text-muted">{{ $order->detailPesanan->count() }} item total</div>
                                 </td>
                                 <td>
-                                    <div>{{ $order->order_date->format('M d') }}</div>
-                                    <div class="small text-muted">{{ $order->order_date->format('h:i A') }}</div>
+                                    <div>{{ $order->order_date->format('d M') }}</div>
+                                    <div class="small text-muted">{{ $order->order_date->format('H:i') }}</div>
                                 </td>
                                 <td>
                                     <span class="status-pill {{ $statusClass }}">
-                                        {{ ucfirst($order->payment_status ?? 'pending') }}
+                                        {{ ($order->payment_status ?? 'pending') === 'paid' ? 'Lunas' : ucfirst($order->payment_status ?? 'pending') }}
                                     </span>
                                 </td>
-                                <td class="fw-semibold">${{ number_format($order->total_amount / 1000, 2) }}</td>
+                                <td class="fw-semibold">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
                                 <td>
                                     <div class="action-icons">
                                         <a href="{{ route('orders.show', $order) }}" class="text-reset"><i class="bi bi-eye"></i></a>
@@ -123,23 +134,9 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap gap-2">
-            <div class="small text-muted">Showing {{ $orders->count() }} to {{ $orders->count() }} of {{ $orders->total() }} orders</div>
+            <div class="small text-muted">Menampilkan {{ $orders->count() }} dari total {{ $orders->total() }} pesanan</div>
             {{ $orders->links() }}
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const searchInput = document.getElementById('orders-search');
-            const rows = document.querySelectorAll('.order-row');
-
-            searchInput?.addEventListener('input', function () {
-                const keyword = this.value.trim().toLowerCase();
-
-                rows.forEach((row) => {
-                    row.style.display = (row.dataset.search || '').includes(keyword) ? '' : 'none';
-                });
-            });
-        });
-    </script>
 @endsection

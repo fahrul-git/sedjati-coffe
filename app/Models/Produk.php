@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Produk extends Model
 {
@@ -19,6 +20,7 @@ class Produk extends Model
         'price',
         'stock',
         'description',
+        'image_path',
         'is_active',
     ];
 
@@ -33,5 +35,10 @@ class Produk extends Model
     public function detailPesanan(): HasMany
     {
         return $this->hasMany(DetailPesanan::class, 'produk_id');
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image_path ? Storage::url($this->image_path) : null;
     }
 }

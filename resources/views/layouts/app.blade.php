@@ -730,10 +730,10 @@
                     <a href="{{ route('orders.index') }}" class="sidebar-link {{ request()->routeIs('orders.*') ? 'active' : '' }}">
                         <i class="bi bi-receipt"></i> Orders
                     </a>
-                    <a href="#" class="sidebar-link">
+                    <a href="{{ route('customers.index') }}" class="sidebar-link {{ request()->routeIs('customers.*') ? 'active' : '' }}">
                         <i class="bi bi-people"></i> Customers
                     </a>
-                    <a href="#" class="sidebar-link">
+                    <a href="{{ route('settings.index') }}" class="sidebar-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
                         <i class="bi bi-gear"></i> Settings
                     </a>
                 </nav>

@@ -1,7 +1,7 @@
 @php
     $topbarTitle = 'Sedjati Coffee';
-    $topbarSubtitle = 'Process payment';
-    $topbarSearchPlaceholder = 'Search orders...';
+    $topbarSubtitle = 'Proses pembayaran';
+    $topbarSearchPlaceholder = 'Cari pesanan...';
 @endphp
 
 @extends('layouts.app')
@@ -10,16 +10,16 @@
     <div class="page-grid">
         <div class="page-header">
             <div>
-                <div class="page-eyebrow">Checkout</div>
-                <h1 class="page-title">Payment Processing</h1>
-                <p class="page-subtitle">{{ $order->order_number }} is ready to be completed.</p>
+                <div class="page-eyebrow">Pembayaran</div>
+                <h1 class="page-title">Proses Pembayaran</h1>
+                <p class="page-subtitle">{{ $order->order_number }} siap diselesaikan.</p>
             </div>
         </div>
 
         <div class="form-shell">
             <div class="form-card">
-                <h2 class="panel-title mb-1">Choose payment method</h2>
-                <p class="panel-subtitle mb-4">Process payment with cash, QRIS, or debit card.</p>
+                <h2 class="panel-title mb-1">Pilih metode pembayaran</h2>
+                <p class="panel-subtitle mb-4">Proses pembayaran menggunakan metode yang aktif di pengaturan.</p>
 
                 <form action="{{ route('orders.payment.store', $order) }}" method="POST">
                     @csrf
@@ -27,9 +27,9 @@
                     <div class="mb-3">
                         <label for="payment_method" class="form-label">Metode Pembayaran</label>
                         <select name="payment_method" id="payment_method" class="form-select soft-select">
-                            <option value="cash" @selected(old('payment_method') === 'cash')>Cash</option>
-                            <option value="qris" @selected(old('payment_method') === 'qris')>QRIS</option>
-                            <option value="debit card" @selected(old('payment_method') === 'debit card')>Debit Card</option>
+                            @foreach ($paymentMethods as $value => $label)
+                                <option value="{{ $value }}" @selected(old('payment_method', array_key_first($paymentMethods)) === $value)>{{ $label }}</option>
+                            @endforeach
                         </select>
                     </div>
 
@@ -57,8 +57,8 @@
             </div>
 
             <aside class="summary-card">
-                <div class="page-eyebrow">Order Summary</div>
-                <h2 class="panel-title mb-3">{{ $order->customer_name ?? 'Walk-in Customer' }}</h2>
+                <div class="page-eyebrow">Ringkasan Pesanan</div>
+                <h2 class="panel-title mb-3">{{ $order->customer_name ?? 'Customer Langsung' }}</h2>
                 <div class="info-list mb-4">
                     <div class="info-row">
                         <span class="muted-copy">Nomor Meja</span>

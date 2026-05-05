@@ -4,30 +4,58 @@ namespace App\Http\Controllers;
 
 use App\Models\Pesanan;
 use App\Models\Produk;
+use App\Models\Setting;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class PesananController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
         $orders = Pesanan::query()
             ->with(['user', 'detailPesanan'])
+            ->when($request->filled('q'), function (Builder $query) use ($request) {
+                $keyword = trim((string) $request->string('q'));
+
+                $query->where(function (Builder $builder) use ($keyword) {
+                    $builder
+                        ->where('order_number', 'like', "%{$keyword}%")
+                        ->orWhere('customer_name', 'like', "%{$keyword}%")
+                        ->orWhere('table_number', 'like', "%{$keyword}%")
+                        ->orWhereHas('detailPesanan', function (Builder $detailQuery) use ($keyword) {
+                            $detailQuery->where('product_name', 'like', "%{$keyword}%");
+                        });
+                });
+            })
+            ->when($request->filled('payment_status'), function (Builder $query) use ($request) {
+                $query->where('payment_status', $request->string('payment_status'));
+            })
+            ->when($request->filled('date_from'), function (Builder $query) use ($request) {
+                $query->whereDate('order_date', '>=', $request->string('date_from'));
+            })
+            ->when($request->filled('date_to'), function (Builder $query) use ($request) {
+                $query->whereDate('order_date', '<=', $request->string('date_to'));
+            })
             ->latest('order_date')
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         $orderStats = [
             'today_revenue' => Pesanan::query()->whereDate('order_date', today())->where('payment_status', 'paid')->sum('total_amount'),
             'active_orders' => Pesanan::query()->whereIn('status', ['pending', 'processing'])->count(),
-            'avg_prep_time' => '4.2 min',
+            'avg_prep_time' => '4,2 menit',
             'satisfaction' => '98%',
         ];
 
-        return view('orders.index', compact('orders', 'orderStats'));
+        $filters = $request->only(['q', 'payment_status', 'date_from', 'date_to']);
+
+        return view('orders.index', compact('orders', 'orderStats', 'filters'));
     }
 
     public function create(): View
@@ -38,8 +66,9 @@ class PesananController extends Controller
             ->get();
 
         $productOptions = $this->productOptions();
+        $paymentMethods = $this->availablePaymentMethods();
 
-        return view('orders.create', compact('products', 'productOptions'));
+        return view('orders.create', compact('products', 'productOptions', 'paymentMethods'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -54,13 +83,13 @@ class PesananController extends Controller
                 ->keyBy('id');
 
             $pesanan = Pesanan::create([
-                'order_number' => 'SDJ-'.now()->format('YmdHis'),
+                'order_number' => $this->generateOrderNumber(),
                 'user_id' => $request->user()->id,
                 'customer_name' => $validated['customer_name'] ?? null,
                 'table_number' => $validated['table_number'] ?? null,
                 'order_date' => now(),
                 'status' => 'pending',
-                'payment_status' => 'pending',
+                'payment_status' => Setting::getValue('default_payment_status', 'pending'),
                 'notes' => null,
                 'total_amount' => 0,
             ]);
@@ -125,14 +154,17 @@ class PesananController extends Controller
     public function createPayment(Pesanan $order): View
     {
         $order->load(['user', 'detailPesanan.produk']);
+        $paymentMethods = $this->availablePaymentMethods();
 
-        return view('orders.payment', compact('order'));
+        return view('orders.payment', compact('order', 'paymentMethods'));
     }
 
     public function storePayment(Request $request, Pesanan $order): RedirectResponse
     {
+        $paymentMethods = array_keys($this->availablePaymentMethods());
+
         $validated = $request->validate([
-            'payment_method' => ['required', Rule::in(['cash', 'qris', 'debit card'])],
+            'payment_method' => ['required', Rule::in($paymentMethods)],
             'paid_amount' => ['nullable', 'numeric', 'min:0'],
         ]);
 
@@ -219,5 +251,33 @@ class PesananController extends Controller
                 'items' => "Pilihan untuk {$produk->name} tidak valid.",
             ]);
         }
+    }
+
+    protected function availablePaymentMethods(): array
+    {
+        $configured = Setting::getArrayValue('payment_methods', ['cash', 'qris', 'debit card']);
+        $labels = [
+            'cash' => 'Tunai',
+            'qris' => 'QRIS',
+            'debit card' => 'Kartu Debit',
+        ];
+
+        return collect($configured)
+            ->filter(fn (string $method) => array_key_exists($method, $labels))
+            ->mapWithKeys(fn (string $method) => [$method => $labels[$method]])
+            ->all();
+    }
+
+    protected function generateOrderNumber(): string
+    {
+        $format = Setting::getValue('order_number_format', 'SDJ-{date}-{sequence}');
+        $dailySequence = str_pad((string) (Pesanan::query()->whereDate('order_date', today())->count() + 1), 3, '0', STR_PAD_LEFT);
+
+        return Str::of($format)
+            ->replace('{date}', now()->format('Ymd'))
+            ->replace('{time}', now()->format('His'))
+            ->replace('{sequence}', $dailySequence)
+            ->replace('{rand}', Str::upper(Str::random(4)))
+            ->toString();
     }
 }
