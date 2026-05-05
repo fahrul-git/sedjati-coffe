@@ -587,6 +587,81 @@
             cursor: default;
         }
 
+        .form-shell {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.7fr);
+            gap: 16px;
+        }
+
+        .form-card,
+        .summary-card,
+        .receipt-card {
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: var(--surface);
+            padding: 18px;
+        }
+
+        .summary-card {
+            background: var(--surface-soft);
+        }
+
+        .soft-input,
+        .soft-select,
+        .soft-textarea {
+            border: 1px solid #eadfd4;
+            border-radius: 14px;
+            background: #fcfaf7;
+        }
+
+        .soft-input,
+        .soft-select {
+            min-height: 46px;
+        }
+
+        .soft-textarea {
+            min-height: 100px;
+        }
+
+        .stack-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .stack-item {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 14px;
+            background: #fff;
+        }
+
+        .info-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #eadfd4;
+        }
+
+        .info-row:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .receipt-shell {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        .receipt-card {
+            padding: 28px;
+        }
+
         @media (max-width: 1200px) {
             .metric-grid,
             .menu-grid {
@@ -594,6 +669,10 @@
             }
 
             .dashboard-panels {
+                grid-template-columns: 1fr;
+            }
+
+            .form-shell {
                 grid-template-columns: 1fr;
             }
         }
@@ -679,11 +758,23 @@
                     <div class="topbar-actions">
                         <span class="icon-chip"><i class="bi bi-bell"></i></span>
                         <span class="icon-chip"><i class="bi bi-cart3"></i></span>
+
                         <div class="text-end d-none d-md-block">
                             <div class="fw-semibold small">{{ auth()->user()->name ?? 'Admin User' }}</div>
                             <small class="muted-copy text-uppercase">{{ auth()->user()->role ?? 'Manager' }}</small>
                         </div>
-                        <div class="avatar-chip">{{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}</div>
+
+                        <div class="avatar-chip">
+                            {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                        </div>
+
+                        <!-- 🔥 LOGOUT BUTTON -->
+                        <form method="POST" action="{{ route('logout') }}" style="margin-left:10px;">
+                             @csrf
+                            <button class="btn btn-sm btn-dark rounded-pill">
+                                 Logout
+                            </button>
+                        </form>
                     </div>
                 </div>
 
