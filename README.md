@@ -1,59 +1,366 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ☕ Sedjati Coffee POS
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Web-Based Cafe Point of Sale and Operational Management System.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# 📌 Project Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Sedjati Coffee POS adalah sistem Point of Sale berbasis web yang dibuat untuk membantu operasional cafe secara lebih modern, cepat, dan terintegrasi.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Sistem ini memiliki fitur:
 
-## Learning Laravel
+* Dashboard Monitoring
+* Menu Management
+* Order Management
+* Payment System
+* Receipt System
+* Customer Management
+* Settings Management
+* Multi Role Authentication
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# 🛠️ Tech Stack
 
-## Laravel Sponsors
+| Component       | Technology             |
+| --------------- | ---------------------- |
+| Backend         | Laravel 12             |
+| Frontend        | Blade                  |
+| Database        | MySQL                  |
+| Styling         | Bootstrap & Custom CSS |
+| Server          | XAMPP                  |
+| Version Control | Git & GitHub           |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+# 🚀 Development Process
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 1. Project Initialization
 
-## Contributing
+Project dimulai dengan membuat project Laravel menggunakan Composer.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer create-project laravel/laravel project_1
+```
 
-## Code of Conduct
+Masuk ke folder project:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+cd project_1
+```
 
-## Security Vulnerabilities
+Menjalankan development server:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan serve
+```
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 🔗 Git Initialization
+
+Project dihubungkan dengan Git untuk version control.
+
+```bash
+git init
+```
+
+Commit pertama:
+
+```bash
+git add .
+git commit -m "init: setup laravel project"
+```
+
+Project kemudian dihubungkan ke GitHub repository.
+
+```bash
+git remote add origin https://github.com/username/sedjati-coffe-pos.git
+git push -u origin main
+```
+
+---
+
+# 🤖 AI-Assisted Development
+
+Project dikembangkan menggunakan bantuan OpenAI Codex yang terhubung ke Visual Studio Code.
+
+## Workflow Development
+
+1. Mendesain struktur sistem
+2. Membuat database dan migration
+3. Membuat model dan relasi database
+4. Membuat controller Laravel
+5. Mendesain UI dashboard
+6. Mengintegrasikan frontend dengan backend
+7. Menambahkan fitur transaksi dan pembayaran
+8. Menambahkan customer management
+9. Menambahkan settings management
+10. Testing dan debugging sistem
+
+---
+
+# 🧱 Database Development
+
+## Database Tables
+
+Sistem menggunakan beberapa tabel utama:
+
+* users
+* customers
+* produk
+* pesanan
+* detail_pesanan
+* settings
+
+Migration dibuat menggunakan Laravel migration system.
+
+Contoh command:
+
+```bash
+php artisan make:migration create_produk_table
+```
+
+Menjalankan migration:
+
+```bash
+php artisan migrate
+```
+
+---
+
+# 🎨 UI & Frontend Development
+
+UI sistem dikembangkan menggunakan:
+
+* Blade Template
+* Bootstrap
+* Custom CSS
+
+Dashboard didesain menggunakan konsep modern admin dashboard dengan tampilan cafe aesthetic.
+
+Fokus utama UI:
+
+* Clean layout
+* Responsive design
+* Card-based dashboard
+* Modern cafe color palette
+
+---
+
+# 🔐 Authentication System
+
+Authentication menggunakan Laravel authentication system.
+
+Fitur authentication:
+
+* Login admin
+* Login kasir
+* Session management
+* Logout system
+* Role-based access
+
+---
+
+# 📊 Dashboard Development
+
+Dashboard dikembangkan untuk monitoring operasional cafe.
+
+Fitur dashboard:
+
+* Total revenue
+* Total orders
+* Active tables
+* Average prep time
+* Weekly sales chart
+* Trending menu
+* Recent orders
+
+---
+
+# 🍽️ Menu Management Development
+
+Menu management dibuat untuk mengelola produk cafe.
+
+Fitur:
+
+* CRUD produk
+* Product category
+* Product stock
+* Product filter
+* Product search
+* Pagination
+* Product status
+
+---
+
+# 🧾 Order Management Development
+
+Order system dibuat untuk mengelola transaksi cafe.
+
+Fitur:
+
+* Create order
+* Multiple order items
+* Item option
+* Item notes
+* Table number
+* Customer name
+* Order history
+* Export order
+* Payment status
+
+---
+
+# 💳 Payment System Development
+
+Payment system dibuat untuk mempermudah proses pembayaran.
+
+Fitur:
+
+* Payment method selection
+* Cash payment
+* QRIS payment
+* Change calculation
+* Payment validation
+* Payment status
+
+---
+
+# 🧍 Customer Management Development
+
+Customer management digunakan untuk mengelola data customer.
+
+Fitur:
+
+* Customer list
+* Customer statistics
+* Total transactions
+* Total spending
+* First purchase tracking
+
+---
+
+# ⚙️ Settings Management Development
+
+Settings management digunakan untuk konfigurasi sistem.
+
+Fitur:
+
+* Business information
+* Tax settings
+* Service fee settings
+* Payment methods
+* User role management
+* Order number format
+
+---
+
+# 🧪 Testing & Debugging
+
+Testing dilakukan selama proses development.
+
+Beberapa proses debugging:
+
+* Route debugging
+* Authentication debugging
+* Logout system debugging
+* Database relationship debugging
+* UI responsiveness debugging
+* Payment flow debugging
+
+---
+
+# 📂 Project Structure
+
+```bash
+app/
+bootstrap/
+config/
+database/
+public/
+resources/
+routes/
+storage/
+vendor/
+```
+
+---
+
+# 📈 Future Improvements
+
+Pengembangan berikutnya:
+
+* Multi branch system
+* Realtime dashboard
+* Export PDF & Excel
+* Loyalty point system
+* Activity log
+* Thermal printer integration
+* Dark mode
+
+---
+
+# 👨‍💻 Developer Notes
+
+Project ini dikembangkan sebagai implementasi sistem Point of Sale berbasis web menggunakan Laravel dengan pendekatan modern dashboard dan operational management system.
+
+Fokus utama project:
+
+* Modern UI/UX
+* Structured database
+* Transaction workflow
+* Cafe operational management
+
+---
+
+# 📌 Installation Guide
+
+Clone repository:
+
+```bash
+git clone https://github.com/username/sedjati-coffe-pos.git
+```
+
+Masuk ke folder project:
+
+```bash
+cd project_1
+```
+
+Install dependency:
+
+```bash
+composer install
+```
+
+Copy environment file:
+
+```bash
+copy .env.example .env
+```
+
+Generate application key:
+
+```bash
+php artisan key:generate
+```
+
+Setup database dan migrate:
+
+```bash
+php artisan migrate
+```
+
+Jalankan server:
+
+```bash
+php artisan serve
+```
+
+---
+
+# 📄 License
+
+This project is developed for educational and portfolio purposes.
