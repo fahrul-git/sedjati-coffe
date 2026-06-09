@@ -1,7 +1,8 @@
 Project: Sedjati Coffee Management System
 
 Stack:
-- Laravel 10
+- Laravel 12
+- PHP 8.4
 - Blade + Bootstrap
 - MySQL
 
