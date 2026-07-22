@@ -96,6 +96,11 @@
                         <div class="d-flex gap-2 mt-3">
                             <a href="{{ route('products.edit', $product) }}" class="btn btn-sm btn-outline-dark">Edit</a>
                             <a href="{{ route('products.show', $product) }}" class="btn btn-sm btn-outline-secondary">Lihat</a>
+                            <form method="POST" action="{{ route('products.destroy', $product) }}" onsubmit="return confirm('Hapus produk ini?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
+                            </form>
                         </div>
                     </div>
                 </article>

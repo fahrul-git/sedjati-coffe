@@ -121,6 +121,27 @@ class SedjatiCoffeeTest extends TestCase
         Storage::disk('public')->assertExists($product->image_path);
     }
 
+    public function test_admin_can_delete_product(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        $product = Produk::create([
+            'name' => 'Espresso',
+            'slug' => 'espresso',
+            'category' => 'Coffee',
+            'price' => 18000,
+            'stock' => 8,
+            'description' => 'Classic espresso.',
+            'is_active' => true,
+        ]);
+
+        $response = $this->actingAs($admin)->delete(route('products.destroy', $product));
+
+        $response->assertRedirect(route('products.index'));
+        $this->assertDatabaseMissing('produk', [
+            'id' => $product->id,
+        ]);
+    }
+
     public function test_kasir_cannot_access_product_page(): void
     {
         $kasir = User::factory()->create(['role' => 'kasir']);
